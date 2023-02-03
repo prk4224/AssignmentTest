@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.jaehong.assignment_test'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.jaehong.assignment_test"
@@ -47,7 +47,6 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":presenter"))
-
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     testImplementation 'junit:junit:4.13.2'
