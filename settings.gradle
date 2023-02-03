@@ -14,3 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AssignmentTest"
 include ':app'
+include ':domain'
+include ':data'
+include ':presenter'

@@ -1,4 +1,4 @@
-package com.jaehong.assignment_test.ui.theme
+package com.jaehong.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

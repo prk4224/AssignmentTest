@@ -1,4 +1,4 @@
-package com.jaehong.assignment_test.ui.theme
+package com.jaehong.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
