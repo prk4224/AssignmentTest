@@ -44,4 +44,13 @@ class SearchViewModel @Inject constructor(
        }
    }
 
+    fun onNavigateToWebViewClicked(link: String) {
+        viewModelScope.launch {
+            val encodedUrl =
+                withContext(Dispatchers.IO) {
+                    URLEncoder.encode(link, "UTF-8")
+                }
+            searchAppNavigator.navigateTo(Destination.WebView(encodedUrl))
+        }
+    }
 }
