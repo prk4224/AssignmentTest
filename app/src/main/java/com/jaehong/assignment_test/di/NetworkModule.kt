@@ -6,6 +6,7 @@ import com.jaehong.assignment_test.Constants.CLIENT_ID_KEY
 import com.jaehong.assignment_test.Constants.CLIENT_ID_VALUE
 import com.jaehong.assignment_test.Constants.CLIENT_SECRET_KEY
 import com.jaehong.assignment_test.Constants.CLIENT_SECRET_VALUE
+import com.jaehong.data.remote.network.NaverApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +55,12 @@ class NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): NaverApiService {
+        return retrofit.create(NaverApiService::class.java)
+    }
 
     class ApiInterceptor : Interceptor {
         @Throws(IOException::class)
