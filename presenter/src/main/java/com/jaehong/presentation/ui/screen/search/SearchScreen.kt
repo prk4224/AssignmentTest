@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presentation.ui.screen.search.header.HeaderItem
@@ -26,8 +24,9 @@ fun SearchScreen(
 ) {
 
     val searchList = searchViewModel.searchList.collectAsState().value
+    val searchKeyword = searchViewModel.searchKeyword.collectAsState().value
 
-    val (text, setText) = rememberSaveable { mutableStateOf("") }
+    val (text, setText) = rememberSaveable { mutableStateOf(searchKeyword) }
 
     SearchInfoItems(
         list = searchList,
@@ -40,8 +39,16 @@ fun SearchScreen(
                     .padding(5.dp),
                 text = text,
                 setText = setText,
-                searchOnClicked = { searchViewModel.getSearchList(text) },
-                recentOnClicked = { }
+                searchOnClicked = {
+                    if(text == "") {
+                        searchViewModel.clearSearchList()
+                    } else {
+                        searchViewModel.getSearchList(text)
+                        searchViewModel.insertRecentInfo(text)
+                    }
+
+                },
+                recentOnClicked = { searchViewModel.onNavigateToRecentClicked() }
             )
         },
         itemScreen = {
