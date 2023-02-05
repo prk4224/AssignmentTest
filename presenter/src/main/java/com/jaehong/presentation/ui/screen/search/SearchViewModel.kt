@@ -23,28 +23,38 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSearchInfoUseCase: GetSearchInfoUseCase,
-    private val searchAppNavigator: SearchAppNavigator
+    private val searchAppNavigator: SearchAppNavigator,
+    savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
     private val _searchList = MutableStateFlow<List<MovieItem>>(listOf())
     val searchList = _searchList.asStateFlow()
 
+    private val _searchKeyword = MutableStateFlow("")
+    val searchKeyword = _searchKeyword.asStateFlow()
 
-   fun getSearchList(keyword: String) {
+    init {
+        val keyword = savedStateHandle.get<String>(Destination.Search.KEYWORD_KEY)
+        if (keyword != null) {
+            _searchKeyword.value = keyword
+            getSearchList(keyword)
+        }
+    }
 
-       viewModelScope.launch {
-           getSearchInfoUseCase(keyword).collectLatest{
-               when(it){
-                   is ApiResult.Error -> {
-                       throw NetworkErrorException("Network Connect Error")
-                   }
-                   is ApiResult.Success -> {
-                       _searchList.value = it.data.items
-                   }
-               }
-           }
-       }
-   }
+    fun getSearchList(keyword: String) {
+        viewModelScope.launch {
+            getSearchInfoUseCase(keyword).collectLatest {
+                checkedResult(
+                    apiResult = it,
+                    success = { data -> _searchList.value = data.items }
+                )
+            }
+        }
+    }
+
+    fun clearSearchList() {
+        _searchList.value = listOf()
+    }
 
     fun onNavigateToWebViewClicked(link: String) {
         viewModelScope.launch {
