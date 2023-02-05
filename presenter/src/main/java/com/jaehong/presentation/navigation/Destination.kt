@@ -16,7 +16,13 @@ sealed class Destination(protected val route: String, vararg params: String) {
         operator fun invoke(): String = route
     }
 
-    object Search : NoArgumentsDestination(SEARCH)
+    object Search : Destination(SEARCH,"keyword") {
+        const val KEYWORD_KEY = "keyword"
+        operator fun invoke(keyword: String): String = route.appendParams(
+            KEYWORD_KEY to keyword
+        )
+    }
+
     object Recent : NoArgumentsDestination(RECENT)
 
     object WebView : Destination(WEB_VIE, "link") {

@@ -11,6 +11,7 @@ import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.navigation.NavHost
 import com.jaehong.presentation.navigation.NavigationIntent
 import com.jaehong.presentation.navigation.composable
+import com.jaehong.presentation.ui.screen.recent.RecentScreen
 import com.jaehong.presentation.ui.screen.search.SearchScreen
 import com.jaehong.presentation.ui.screen.wevview.WebViewScreen
 import com.jaehong.presentation.ui.theme.AssignmentTestTheme
@@ -37,7 +38,9 @@ fun HomeScreen(
             composable(Destination.WebView) {
                 WebViewScreen()
             }
-
+            composable(Destination.Recent) {
+                RecentScreen()
+            }
         }
     }
 }
