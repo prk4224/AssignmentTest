@@ -4,7 +4,7 @@ import com.jaehong.domain.model.ApiResult
 import com.jaehong.domain.model.MovieItems
 import kotlinx.coroutines.flow.Flow
 
-interface SearchRepository {
+interface RemoteRepository {
     suspend fun getSearchMovie(
         keyword: String,
     ): Flow<ApiResult<MovieItems>>

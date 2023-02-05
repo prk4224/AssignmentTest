@@ -1,16 +1,16 @@
 package com.jaehong.data.remote.repository
 
-import com.jaehong.data.remote.datasource.SearchDataSource
+import com.jaehong.data.remote.datasource.RemoteDataSource
 import com.jaehong.domain.model.ApiResult
 import com.jaehong.domain.model.MovieItems
-import com.jaehong.domain.repository.SearchRepository
+import com.jaehong.domain.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SearchRepositoryImpl @Inject constructor(
-    private val dataSource: SearchDataSource
-): SearchRepository {
+class RemoteRepositoryImpl @Inject constructor(
+    private val dataSource: RemoteDataSource
+): RemoteRepository {
     override suspend fun getSearchMovie(
         keyword: String
     ): Flow<ApiResult<MovieItems>> = flow {
