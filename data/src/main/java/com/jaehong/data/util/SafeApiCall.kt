@@ -1,4 +1,4 @@
-package com.jaehong.data.remote.util
+package com.jaehong.data.util
 
 import com.jaehong.domain.model.ApiResult
 import retrofit2.Response
