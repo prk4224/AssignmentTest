@@ -1,9 +1,13 @@
 package com.jaehong.assignment_test.di
 
-import com.jaehong.data.remote.datasource.SearchDataSource
-import com.jaehong.data.remote.datasource.SearchDataSourceImpl
-import com.jaehong.data.remote.repository.SearchRepositoryImpl
-import com.jaehong.domain.repository.SearchRepository
+import com.jaehong.data.local.datasource.LocalDataSource
+import com.jaehong.data.local.datasource.LocalDataSourceImpl
+import com.jaehong.data.local.repository.LocalRepositoryImpl
+import com.jaehong.data.remote.datasource.RemoteDataSource
+import com.jaehong.data.remote.datasource.RemoteDataSourceImpl
+import com.jaehong.data.remote.repository.RemoteRepositoryImpl
+import com.jaehong.domain.repository.LocalRepository
+import com.jaehong.domain.repository.RemoteRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,9 +20,17 @@ interface RepositoryModule {
 
     @Singleton
     @Binds
-    fun bindSearchRepository(searchRepository: SearchRepositoryImpl): SearchRepository
+    fun bindRemoteRepository(remoteRepositoryImpl: RemoteRepositoryImpl): RemoteRepository
 
     @Singleton
     @Binds
-    fun bindSearchDataSource(searchDataSourceImpl: SearchDataSourceImpl): SearchDataSource
+    fun bindRemoteDataSource(remoteDataSourceImpl: RemoteDataSourceImpl): RemoteDataSource
+
+    @Singleton
+    @Binds
+    fun bindLocalRepository(localRepositoryImpl: LocalRepositoryImpl): LocalRepository
+
+    @Singleton
+    @Binds
+    fun bindLocalDataSource(localDataSourceImpl: LocalDataSourceImpl): LocalDataSource
 }
