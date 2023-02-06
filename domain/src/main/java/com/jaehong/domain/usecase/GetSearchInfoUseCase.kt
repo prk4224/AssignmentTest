@@ -16,11 +16,10 @@ class GetSearchInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
     suspend operator fun invoke(
-        keyword: String
-    ): Flow<ApiResult<MovieItems>> = flow {
-        remoteRepository.getSearchMovie(keyword).collect {
-            emit(it)
-        }
+        keyword: String,
+        start: Int
+    ): ApiResult<MovieItems> {
+        return remoteRepository.getSearchMovie(keyword,start)
     }
 
     suspend fun insertRecentInfo(info: String) {

@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface RemoteDataSource {
     suspend fun getSearchMovie(
         keyword: String,
-    ): Flow<ApiResult<MovieItems>>
+        start: Int,
+    ): ApiResult<MovieItems>
 }
