@@ -10,6 +10,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.jaehong.domain.model.UiStateResult
 import com.jaehong.presentation.ui.screen.search.header.HeaderItem
 import com.jaehong.presentation.ui.screen.search.info.SearchInfoItem
 import com.jaehong.presentation.ui.screen.search.info.SearchInfoItems
@@ -24,10 +26,10 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
-    val searchList = searchViewModel.searchList.collectAsState().value
     val searchKeyword = searchViewModel.searchKeyword.collectAsState().value
     val snackbarState = searchViewModel.snackbarState.collectAsState().value
     val progressBarState = searchViewModel.uiState.collectAsState().value
+    val searchList = searchViewModel.searchList?.collectAsLazyPagingItems()
 
     val (text, setText) = rememberSaveable { mutableStateOf(searchKeyword) }
     val snackBarState = remember { SnackbarHostState() }
@@ -45,12 +47,12 @@ fun SearchScreen(
                 text = text,
                 setText = setText,
                 searchOnClicked = {
-                    if(text == "") searchViewModel.clearSearchList()
-                    else {
+                    if(text != "") {
                         searchViewModel.showProgressBar()
-                        searchViewModel.getSearchList(text)
+                        searchViewModel.setSearchList(text)
+                    } else {
+                        searchViewModel.clearSearchList()
                     }
-
                 },
                 recentOnClicked = { searchViewModel.onNavigateToRecentClicked() }
             )
@@ -60,7 +62,7 @@ fun SearchScreen(
                 item = it,
                 itemOnClicked = { searchViewModel.onNavigateToWebViewClicked(it.link) }
             )
-        }
+        },
     )
 
     if (snackbarState) {
@@ -70,7 +72,7 @@ fun SearchScreen(
         )
     }
 
-    if(progressBarState) {
+    if(progressBarState == UiStateResult.LOADING) {
         CircularProgressBar()
     }
 }
