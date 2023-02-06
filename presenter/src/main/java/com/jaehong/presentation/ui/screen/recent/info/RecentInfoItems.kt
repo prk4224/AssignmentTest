@@ -1,20 +1,24 @@
 package com.jaehong.presentation.ui.screen.recent.info
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jaehong.domain.model.RecentInfo
+
 
 @Composable
 fun RecentInfoItems(
-    recentItems: List<String>,
+    recentItems: List<RecentInfo>,
     headerItem: @Composable (Modifier) -> Unit,
-    recentItem: @Composable (String) -> Unit
+    recentItem: @Composable (Modifier,RecentInfo) -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -27,16 +31,20 @@ fun RecentInfoItems(
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(100.dp),
+            columns = GridCells.Adaptive(80.dp),
             content = {
                 items(recentItems) {
-                    recentItem(it)
+                    recentItem(
+                        Modifier
+                            .height(70.dp)
+                            .padding(10.dp)
+                            .border(3.dp, Color.Gray,RoundedCornerShape(20)),
+                        it)
                 }
             },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 40.dp),
+                .padding(top = 60.dp),
         )
     }
-
 }

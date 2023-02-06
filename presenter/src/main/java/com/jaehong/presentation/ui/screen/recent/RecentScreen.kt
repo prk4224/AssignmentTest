@@ -17,10 +17,14 @@ fun RecentScreen(
 
     RecentInfoItems(
         recentItems = recentInfoList,
-        recentItem = { keyword ->
+        recentItem = { modifier,recentInfo ->
             RecentInfoItem(
-                recentItem = keyword,
-                itemClicked = { recentViewModel.onNavigateToSearchClicked(keyword) }
+                modifier = modifier,
+                recentItem = recentInfo,
+                itemClicked = {
+                    recentViewModel.onNavigateToSearchClicked(recentInfo.keyword)
+                    recentViewModel.insertRecentInfo(recentInfo)
+                }
             )
         },
         headerItem = { modifier -> RecentHeaderItem(modifier = modifier) }
