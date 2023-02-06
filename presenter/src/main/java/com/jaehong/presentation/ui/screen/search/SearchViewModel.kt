@@ -1,10 +1,8 @@
 package com.jaehong.presentation.ui.screen.search
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
 import com.jaehong.domain.model.MovieItem
 import com.jaehong.domain.usecase.GetSearchInfoUseCase
 import com.jaehong.presentation.navigation.Destination
@@ -33,6 +31,12 @@ class SearchViewModel @Inject constructor(
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword = _searchKeyword.asStateFlow()
 
+    private val _snackbarState = MutableStateFlow(false)
+    val snackbarState = _snackbarState.asStateFlow()
+
+    private val _uiState = MutableStateFlow(false)
+    val uiState = _uiState.asStateFlow()
+
     init {
         val keyword = savedStateHandle.get<String>(Destination.Search.KEYWORD_KEY)
         if (keyword != null) {
@@ -41,12 +45,32 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun showProgressBar() {
+        _uiState.value = true
+    }
+
+    private fun hideProgressBar() {
+        _uiState.value = false
+    }
+
+    private fun showSnackBar() {
+        _snackbarState.value = true
+    }
+
+    fun hideSnackBar() {
+        _snackbarState.value = false
+    }
+
     fun getSearchList(keyword: String) {
         viewModelScope.launch {
             getSearchInfoUseCase(keyword).collectLatest {
                 checkedResult(
                     apiResult = it,
-                    success = { data -> _searchList.value = data.items }
+                    success = { data ->
+                        _searchList.value = data.items
+                        checkSearchListSize(data.items.size,keyword)
+                        hideProgressBar()
+                    }
                 )
             }
         }
@@ -72,14 +96,18 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun insertRecentInfo(keyword: String) {
+    private fun insertRecentInfo(keyword: String) {
         viewModelScope.launch {
-            getSearchInfoUseCase.insertRecentInfo(keyword).collectLatest {
-                checkedResult(
-                    dbResult = it,
-                    success = { massage -> Log.d("DB Insert Checked", massage) }
-                )
-            }
+            getSearchInfoUseCase.insertRecentInfo(keyword)
+        }
+    }
+
+    private fun checkSearchListSize(size: Int,keyword: String) {
+        if(size > 0) {
+            insertRecentInfo(keyword)
+        } else {
+            hideSnackBar()
+            showSnackBar()
         }
     }
 }
