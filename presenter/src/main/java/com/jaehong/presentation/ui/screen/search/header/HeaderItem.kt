@@ -8,6 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jaehong.presentation.util.Constants.RECENT_SEARCH_TEXT
+import com.jaehong.presentation.util.Constants.SEARCH_TEXT
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,7 @@ fun HeaderItem(
                 .weight(1.5f)
 
         ) {
-            Text(text = "검색", color = Color.Black)
+            Text(text = SEARCH_TEXT, color = Color.Black)
         }
         Spacer(modifier = Modifier.size(5.dp))
 
@@ -58,7 +60,9 @@ fun HeaderItem(
                 .fillMaxSize()
                 .weight(1.5f)
         ) {
-            Text(text = "최근 검색", color = Color.Black)
+            Text(text = RECENT_SEARCH_TEXT, color = Color.Black)
         }
     }
 }
+
+

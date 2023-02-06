@@ -18,7 +18,7 @@ class WebViewViewModel @Inject constructor(
 
     init {
         val link = savedStateHandle.get<String>(Destination.WebView.LINK_KEY)
-        _webViewLink.value = getDecode(link?: throw IllegalArgumentException("Link Error"))
+        _webViewLink.value = getDecode(link?: throw IllegalArgumentException("URL Error"))
     }
 
     private fun getDecode(link: String): String{
