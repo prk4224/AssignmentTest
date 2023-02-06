@@ -1,7 +1,9 @@
 package com.jaehong.presentation.ui.screen.recent
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jaehong.domain.model.RecentInfo
 import com.jaehong.domain.usecase.GetRecentInfoUseCase
 import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.navigation.SearchAppNavigator
@@ -22,7 +24,7 @@ class RecentViewModel @Inject constructor(
     private val getRecentInfoUseCase: GetRecentInfoUseCase,
 ) : ViewModel() {
 
-    private val _recentInfoList = MutableStateFlow(listOf<String>())
+    private val _recentInfoList = MutableStateFlow(listOf<RecentInfo>())
     val recentInfoList = _recentInfoList.asStateFlow()
 
     init {
@@ -30,7 +32,15 @@ class RecentViewModel @Inject constructor(
             getRecentInfoUseCase().collectLatest {
                 checkedResult(
                     dbResult = it,
-                    success = { list -> _recentInfoList.value = list}
+                    success = { list ->
+                        if(list.size > 10) {
+                            _recentInfoList.value = list.subList(0,10)
+                            val deleteList = list.subList(11,list.size)
+                            deleteRecentInfoList(deleteList)
+                        } else {
+                            _recentInfoList.value = list
+                        }
+                    }
                 )
             }
         }
@@ -39,6 +49,19 @@ class RecentViewModel @Inject constructor(
     fun onNavigateToSearchClicked(keyword: String) {
         viewModelScope.launch {
             searchAppNavigator.navigateTo(Destination.Search(keyword))
+        }
+    }
+
+    fun insertRecentInfo(recentInfo: RecentInfo) {
+        viewModelScope.launch {
+            getRecentInfoUseCase.insertRecentInfo(recentInfo.keyword)
+            deleteRecentInfoList(listOf(recentInfo))
+        }
+    }
+
+    private fun deleteRecentInfoList(recentList: List<RecentInfo>) {
+        viewModelScope.launch {
+            getRecentInfoUseCase.deleteRecentInfoList(recentList)
         }
     }
 }
