@@ -52,9 +52,8 @@ class RecentViewModel @Inject constructor(
         }
     }
 
-    fun insertRecentInfo(recentInfo: RecentInfo) {
+    fun deleteRecentInfo(recentInfo: RecentInfo) {
         viewModelScope.launch {
-            getRecentInfoUseCase.insertRecentInfo(recentInfo.keyword)
             deleteRecentInfoList(listOf(recentInfo))
         }
     }

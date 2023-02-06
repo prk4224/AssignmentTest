@@ -18,8 +18,7 @@ fun CircularProgressBar() {
         CircularProgressIndicator(
             color = Color.Black,
             modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 100.dp)
+                .align(Alignment.Center)
         )
     }
 }

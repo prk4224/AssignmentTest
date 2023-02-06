@@ -23,7 +23,7 @@ fun RecentScreen(
                 recentItem = recentInfo,
                 itemClicked = {
                     recentViewModel.onNavigateToSearchClicked(recentInfo.keyword)
-                    recentViewModel.insertRecentInfo(recentInfo)
+                    recentViewModel.deleteRecentInfo(recentInfo)
                 }
             )
         },

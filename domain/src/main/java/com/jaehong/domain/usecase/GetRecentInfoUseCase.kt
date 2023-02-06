@@ -18,10 +18,6 @@ class GetRecentInfoUseCase @Inject constructor(
         }
     }
 
-    suspend fun insertRecentInfo(info: String) {
-        localRepository.insertRecentInfo(info)
-    }
-
     suspend fun deleteRecentInfoList(recentList: List<RecentInfo>) {
         localRepository.deleteRecentInfoList(recentList)
     }
