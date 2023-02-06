@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jaehong.presentation.ui.screen.search.header.HeaderItem
 import com.jaehong.presentation.ui.screen.search.info.SearchInfoItem
 import com.jaehong.presentation.ui.screen.search.info.SearchInfoItems
+import com.jaehong.presentation.ui.screen.search.snack.SnackbarScreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
@@ -25,8 +25,11 @@ fun SearchScreen(
 
     val searchList = searchViewModel.searchList.collectAsState().value
     val searchKeyword = searchViewModel.searchKeyword.collectAsState().value
+    val snackbarState = searchViewModel.snackbarState.collectAsState().value
 
     val (text, setText) = rememberSaveable { mutableStateOf(searchKeyword) }
+    val snackBarState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     SearchInfoItems(
         list = searchList,
@@ -58,4 +61,11 @@ fun SearchScreen(
             )
         }
     )
+
+    if (snackbarState) {
+        SnackbarScreen(snackBarState = snackBarState,
+            coroutineScope = coroutineScope,
+            hideSnackbar = { searchViewModel.hideSnackBar() }
+        )
+    }
 }
