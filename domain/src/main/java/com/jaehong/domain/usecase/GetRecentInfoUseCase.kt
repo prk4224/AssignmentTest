@@ -1,6 +1,7 @@
 package com.jaehong.domain.usecase
 
 import com.jaehong.domain.model.DbResult
+import com.jaehong.domain.model.RecentInfo
 import com.jaehong.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -11,16 +12,17 @@ class GetRecentInfoUseCase @Inject constructor(
     private val localRepository: LocalRepository
 ) {
     suspend operator fun invoke()
-    : Flow<DbResult<List<String>>> = flow {
+    : Flow<DbResult<List<RecentInfo>>> = flow {
         localRepository.getRecentList().collect {
             emit(it)
         }
     }
 
-    suspend fun deleteRecentInfo()
-            : Flow<DbResult<String>> = flow {
-        localRepository.deleteLastInfo().collect {
-            emit(it)
-        }
+    suspend fun insertRecentInfo(info: String) {
+        localRepository.insertRecentInfo(info)
+    }
+
+    suspend fun deleteRecentInfoList(recentList: List<RecentInfo>) {
+        localRepository.deleteRecentInfoList(recentList)
     }
 }

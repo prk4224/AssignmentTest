@@ -23,11 +23,7 @@ class GetSearchInfoUseCase @Inject constructor(
         }
     }
 
-    suspend fun insertRecentInfo(
-        info: String
-    ): Flow<DbResult<String>> = flow {
-        localRepository.insertRecentInfo(info).collect {
-            emit(it)
-        }
+    suspend fun insertRecentInfo(info: String) {
+        localRepository.insertRecentInfo(info)
     }
 }
