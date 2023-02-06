@@ -1,5 +1,6 @@
 package com.jaehong.data.local.datasource
 
+import android.util.Log
 import com.jaehong.data.local.database.dao.RecentDao
 import com.jaehong.data.local.database.entity.RecentEntity
 import com.jaehong.data.util.Constants.DB_ERROR_MESSAGE
@@ -23,27 +24,21 @@ class LocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertRecentInfo(info: String)
-    : Flow<DbResult<String>> = flow {
-        val result = recentDao.insetRecentInfo(
+    override suspend fun insertRecentInfo(info: String) {
+        recentDao.insetRecentInfo(
             RecentEntity(
                 info,
                 System.currentTimeMillis().toString()
         ))
-        if(result != null) {
-            emit(DbResult.Success(DB_SUCCESS_MESSAGE))
-        } else {
-            emit(DbResult.Error(Exception(DB_ERROR_MESSAGE)))
-        }
     }
 
-    override suspend fun deleteLastInfo()
-    : Flow<DbResult<String>> = flow {
-        val result = recentDao.deleteLastInt()
-        if(result != null) {
-            emit(DbResult.Success(DB_SUCCESS_MESSAGE))
+    override suspend fun deleteRecentInfoList(
+        recentList: List<RecentEntity>
+    ) {
+        if(recentDao.deleteRecentInfoList(recentList) == 1) {
+            Log.d("DataBase Delete Check", DB_SUCCESS_MESSAGE)
         } else {
-            emit(DbResult.Error(Exception(DB_ERROR_MESSAGE)))
+           throw IllegalAccessException(DB_ERROR_MESSAGE)
         }
     }
 }

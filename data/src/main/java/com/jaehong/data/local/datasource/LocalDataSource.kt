@@ -8,7 +8,7 @@ interface LocalDataSource {
 
     suspend fun getRecentList(): Flow<DbResult<List<RecentEntity>>>
 
-    suspend fun insertRecentInfo(info: String): Flow<DbResult<String>>
+    suspend fun insertRecentInfo(info: String)
 
-    suspend fun deleteLastInfo(): Flow<DbResult<String>>
+    suspend fun deleteRecentInfoList(recentList: List<RecentEntity>)
 }
