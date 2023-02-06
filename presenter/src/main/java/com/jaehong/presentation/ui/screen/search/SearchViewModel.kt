@@ -3,16 +3,21 @@ package com.jaehong.presentation.ui.screen.search
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.jaehong.domain.model.MovieItem
+import com.jaehong.domain.model.UiStateResult
 import com.jaehong.domain.usecase.GetSearchInfoUseCase
 import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.navigation.SearchAppNavigator
-import com.jaehong.presentation.util.checkedResult
+import com.jaehong.presentation.ui.screen.search.paging.SearchInfoPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder
@@ -25,32 +30,44 @@ class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    private val _searchList = MutableStateFlow<List<MovieItem>>(listOf())
-    val searchList = _searchList.asStateFlow()
-
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword = _searchKeyword.asStateFlow()
 
     private val _snackbarState = MutableStateFlow(false)
     val snackbarState = _snackbarState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(false)
+    private val _uiState = MutableStateFlow(UiStateResult.SUCCESS)
     val uiState = _uiState.asStateFlow()
+
+    var searchList: Flow<PagingData<MovieItem>>? = null
 
     init {
         val keyword = savedStateHandle.get<String>(Destination.Search.KEYWORD_KEY)
         if (keyword != null) {
             _searchKeyword.value = keyword
-            getSearchList(keyword)
+            setSearchList(keyword)
         }
     }
 
+    fun setSearchList(keyword: String) {
+        searchList = Pager(
+            PagingConfig(pageSize = 10)
+        ) { SearchInfoPagingSource(
+            keyword = keyword,
+            getSearchInfoUseCase = getSearchInfoUseCase,
+            hideProgressBar = { hideProgressBar() },
+            checkResult = { keyword, size ->
+                checkSearchListSize(size,keyword)
+            }
+        ) }.flow.cachedIn(viewModelScope)
+    }
+
     fun showProgressBar() {
-        _uiState.value = true
+        _uiState.value = UiStateResult.LOADING
     }
 
     private fun hideProgressBar() {
-        _uiState.value = false
+        _uiState.value = UiStateResult.SUCCESS
     }
 
     private fun showSnackBar() {
@@ -61,23 +78,8 @@ class SearchViewModel @Inject constructor(
         _snackbarState.value = false
     }
 
-    fun getSearchList(keyword: String) {
-        viewModelScope.launch {
-            getSearchInfoUseCase(keyword).collectLatest {
-                checkedResult(
-                    apiResult = it,
-                    success = { data ->
-                        _searchList.value = data.items
-                        checkSearchListSize(data.items.size,keyword)
-                        hideProgressBar()
-                    }
-                )
-            }
-        }
-    }
-
     fun clearSearchList() {
-        _searchList.value = listOf()
+        searchList = null
     }
 
     fun onNavigateToWebViewClicked(link: String) {
