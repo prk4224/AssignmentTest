@@ -16,14 +16,14 @@ interface RecentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insetRecentInfo(info: RecentEntity)
 
-    @Query("SELECT * FROM RECENT_LIST_TABLE LIMIT 1")
-    suspend fun getLastInt(): RecentEntity
-
     @Delete
     suspend fun deleteRecentInfo(info: RecentEntity)
 
-    suspend fun deleteLastInt() {
-        return deleteRecentInfo(getLastInt())
+    suspend fun deleteRecentInfoList(recentList: List<RecentEntity>): Int {
+        recentList.forEach {
+            deleteRecentInfo(it)
+        }
+        return 1
     }
 
 }
