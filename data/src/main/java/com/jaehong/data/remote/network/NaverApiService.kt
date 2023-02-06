@@ -11,5 +11,6 @@ interface NaverApiService {
     @GET(MOVIE_JSON)
     suspend fun getSearchMovie(
         @Query("query") keyword: String,
+        @Query("start") start: Int,
     ): Response<MovieItems>
 }
