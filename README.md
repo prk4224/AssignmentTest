@@ -283,8 +283,8 @@ fun setSearchList(keyword: String) {
         ) }.flow.cachedIn(viewModelScope)
     }
 ```
-### 💡 고민한 부분
-: PageSource는 어디에다가 구현 할 것인가 ?
+## 💡 고민한 부분
+### PageSource는 어디에다가 구현 할 것인가 ?
 - data Module ?
 : 엄연히 말하면 Paging 자체가 data를 들고 오는 행위 인것은 맞지만, 얼마나 들고올지 판단해야하는 것은 data Module에 맞지 않는다고 판단.
 
@@ -295,3 +295,48 @@ fun setSearchList(keyword: String) {
 
 - **presenter Module ?**
 : Paging을 얼마나 들고올지 판단하고 명령을 하는 부분은 presenter Module에서 하는 것이 맞다고 판단.
+
+### Result 함수 
+: ApiResult 나 DbResult 의 성공 여부를 체크하는 함수가 너무 많아져서, 공통된 Util 함수로 만들어야 겠다고 판단
+
+제네릭 형태로 result 값을 parameter로 넣은후 성공,실패 함수를 람다 형식으로 받아온다
+```kotlin
+package com.jaehong.presentation.util
+
+import com.jaehong.domain.model.ApiResult
+import com.jaehong.domain.model.DbResult
+
+fun <T : Any> checkedResult(
+    dbResult: DbResult<T>? = null,
+    apiResult: ApiResult<T>? = null,
+    success: (T) -> Unit,
+    error: () -> Unit
+): T {
+    if (dbResult != null) {
+        when (dbResult) {
+            is DbResult.Success -> {
+                success(dbResult.data)
+                return dbResult.data
+            }
+            is DbResult.Error -> {
+                error()
+                throw dbResult.exception
+            }
+        }
+    }
+
+    if (apiResult != null) {
+        when (apiResult) {
+            is ApiResult.Success -> {
+                success(apiResult.data)
+                return apiResult.data
+            }
+            is ApiResult.Error -> {
+                error()
+                throw apiResult.exception
+            }
+        }
+    }
+    throw NullPointerException("Result Type Null")
+}
+```
