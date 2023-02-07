@@ -1,5 +1,6 @@
 package com.jaehong.presentation.ui.screen.wevview
 
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -18,6 +19,7 @@ fun WebViewScreen(
 
     AndroidView(factory = {
         WebView(it).apply {
+            settings.javaScriptEnabled = true
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
