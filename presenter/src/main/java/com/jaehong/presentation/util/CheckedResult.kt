@@ -7,6 +7,7 @@ fun <T : Any> checkedResult(
     dbResult: DbResult<T>? = null,
     apiResult: ApiResult<T>? = null,
     success: (T) -> Unit,
+    error: () -> Unit
 ): T {
     if (dbResult != null) {
         when (dbResult) {
@@ -27,6 +28,7 @@ fun <T : Any> checkedResult(
                 return apiResult.data
             }
             is ApiResult.Error -> {
+                error()
                 throw apiResult.exception
             }
         }
