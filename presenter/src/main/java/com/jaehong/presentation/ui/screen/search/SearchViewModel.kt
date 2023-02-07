@@ -62,6 +62,23 @@ class SearchViewModel @Inject constructor(
         ) }.flow.cachedIn(viewModelScope)
     }
 
+
+    // Test
+    fun getSearchList(keyword: String) {
+        viewModelScope.launch {
+            checkedResult(
+                apiResult = getSearchInfoUseCase(keyword,1),
+                success = {
+                    hideProgressBar()
+                    checkSearchListSize(it.items.size,keyword)
+                },
+                error = {
+                    _uiState.value = UiStateResult.ERROR
+                }
+            )
+        }
+    }
+
     fun showProgressBar() {
         _uiState.value = UiStateResult.LOADING
     }
