@@ -12,7 +12,8 @@ import com.jaehong.domain.model.UiStateResult
 import com.jaehong.domain.usecase.GetSearchInfoUseCase
 import com.jaehong.presentation.navigation.Destination
 import com.jaehong.presentation.navigation.SearchAppNavigator
-import com.jaehong.presentation.ui.screen.search.paging.SearchInfoPagingSource
+import com.jaehong.presentation.ui.screen.search.paging.SearchInfoPageSource
+import com.jaehong.presentation.util.checkedResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -52,13 +53,14 @@ class SearchViewModel @Inject constructor(
     fun setSearchList(keyword: String) {
         searchList = Pager(
             PagingConfig(pageSize = 10)
-        ) { SearchInfoPagingSource(
+        ) { SearchInfoPageSource(
             keyword = keyword,
             getSearchInfoUseCase = getSearchInfoUseCase,
             hideProgressBar = { hideProgressBar() },
-            checkResult = { keyword, size ->
+            checkSearchListSize = { keyword, size ->
                 checkSearchListSize(size,keyword)
-            }
+            },
+            setError = { _uiState.value = UiStateResult.ERROR }
         ) }.flow.cachedIn(viewModelScope)
     }
 
@@ -125,7 +127,6 @@ class SearchViewModel @Inject constructor(
         if(size > 0) {
             insertRecentInfo(keyword)
         } else {
-            hideSnackBar()
             showSnackBar()
         }
     }
