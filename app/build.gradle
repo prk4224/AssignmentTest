@@ -5,6 +5,9 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+def properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.jaehong.assignment_test'
     compileSdk 33
@@ -15,6 +18,9 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "CLIENT_ID", properties["CLIENT_ID_VALUE"])
+        buildConfigField("String", "CLIENT_SECRET", properties["CLIENT_SECRET_VALUE"])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
