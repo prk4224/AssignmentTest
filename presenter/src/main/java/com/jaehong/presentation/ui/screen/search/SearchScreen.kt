@@ -28,8 +28,8 @@ fun SearchScreen(
 ) {
 
     val searchKeyword by searchViewModel.searchKeyword.collectAsState()
-    val snackbarState by searchViewModel.snackbarState.observeAsState()
-    val progressBarState by searchViewModel.uiState.observeAsState()
+    val snackbarState by searchViewModel.snackbarState.collectAsState()
+    val progressBarState by searchViewModel.uiState.collectAsState()
     val searchList = searchViewModel.searchList?.collectAsLazyPagingItems()
 
     val (text, setText) = rememberSaveable { mutableStateOf(searchKeyword) }
@@ -64,7 +64,7 @@ fun SearchScreen(
         },
     )
 
-    if (snackbarState == true) {
+    if (snackbarState) {
         SnackbarScreen(snackBarState = snackBarState,
             coroutineScope = coroutineScope,
             hideSnackbar = { searchViewModel.hideSnackBar() }
