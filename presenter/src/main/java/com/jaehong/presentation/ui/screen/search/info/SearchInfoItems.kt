@@ -18,11 +18,12 @@ fun SearchInfoItems(
         item {
             headerItemScreen()
         }
-
-        if(list != null) {
-            items(list) { data ->
-                itemScreen(data?:throw NullPointerException("Data Null Error"))
+        try {
+            items(list ?: throw NullPointerException("SearchList is Null")) { data ->
+                itemScreen(data?:throw NullPointerException("SearchInfo is Null"))
             }
+        } catch (e: NullPointerException) {
+            e.message
         }
     }
 }

@@ -20,7 +20,7 @@ class LocalDataSourceImpl @Inject constructor(
         if(data != null) {
             emit(DbResult.Success(data))
         } else {
-            emit(DbResult.Error(Exception(DB_ERROR_MESSAGE)))
+            emit(DbResult.Error(NullPointerException(DB_ERROR_MESSAGE)))
         }
     }
 
@@ -35,10 +35,14 @@ class LocalDataSourceImpl @Inject constructor(
     override suspend fun deleteRecentInfoList(
         recentList: List<RecentEntity>
     ) {
-        if(recentDao.deleteRecentInfoList(recentList) == 1) {
-            Log.d("DataBase Delete Check", DB_SUCCESS_MESSAGE)
-        } else {
-           throw IllegalAccessException(DB_ERROR_MESSAGE)
+        try {
+            if(recentDao.deleteRecentInfoList(recentList) == 1) {
+                Log.d("DataBase Delete Check", DB_SUCCESS_MESSAGE)
+            } else {
+                throw IllegalAccessException(DB_ERROR_MESSAGE)
+            }
+        } catch (e: IllegalAccessException) {
+            e.message
         }
     }
 }
