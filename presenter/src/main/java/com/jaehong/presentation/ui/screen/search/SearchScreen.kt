@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,9 +27,9 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
-    val searchKeyword = searchViewModel.searchKeyword.collectAsState().value
-    val snackbarState = searchViewModel.snackbarState.collectAsState().value
-    val progressBarState = searchViewModel.uiState.collectAsState().value
+    val searchKeyword by searchViewModel.searchKeyword.collectAsState()
+    val snackbarState by searchViewModel.snackbarState.observeAsState()
+    val progressBarState by searchViewModel.uiState.observeAsState()
     val searchList = searchViewModel.searchList?.collectAsLazyPagingItems()
 
     val (text, setText) = rememberSaveable { mutableStateOf(searchKeyword) }

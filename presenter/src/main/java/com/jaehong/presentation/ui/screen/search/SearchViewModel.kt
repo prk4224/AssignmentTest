@@ -35,10 +35,10 @@ class SearchViewModel @Inject constructor(
     val searchKeyword = _searchKeyword.asStateFlow()
 
     private val _snackbarState = MutableStateFlow(false)
-    val snackbarState = _snackbarState.asStateFlow()
+    val snackbarState = _snackbarState.asLiveData()
 
     private val _uiState = MutableStateFlow(UiStateResult.SUCCESS)
-    val uiState = _uiState.asStateFlow()
+    val uiState  = _uiState.asLiveData()
 
     var searchList: Flow<PagingData<MovieItem>>? = null
 
