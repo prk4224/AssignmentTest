@@ -63,9 +63,6 @@ dependencies {
     implementation(project(":domain"))
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 
     // Compose
@@ -100,6 +97,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "androidx.paging:paging-compose:1.0.0-alpha17"
 
+    // Test
     // Test
     testImplementation "junit:junit:4.13.2"
     testImplementation 'org.mockito:mockito-inline:2.21.0'
