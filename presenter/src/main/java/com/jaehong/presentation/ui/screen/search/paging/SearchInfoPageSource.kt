@@ -7,11 +7,12 @@ import com.jaehong.domain.model.MovieItems
 import com.jaehong.domain.usecase.GetSearchInfoUseCase
 import com.jaehong.presentation.util.checkedResult
 
-class SearchInfoPagingSource(
+class SearchInfoPageSource(
     private val keyword: String,
     private val getSearchInfoUseCase: GetSearchInfoUseCase,
     private val hideProgressBar: () -> Unit,
-    private val checkSearchListSize: (String, Int) -> Unit
+    private val checkSearchListSize: (String, Int) -> Unit,
+    private val setError: () -> Unit
 ) : PagingSource<Int, MovieItem>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieItem>): Int? {
@@ -34,7 +35,8 @@ class SearchInfoPagingSource(
                     data = it
                     hideProgressBar()
                     if(nextPageNumber == 1) checkSearchListSize(keyword,it.items.size)
-                }
+                },
+                error = { setError()}
             )
 
             return LoadResult.Page(
