@@ -8,6 +8,7 @@ import com.jaehong.data.util.Constants.DB_SUCCESS_MESSAGE
 import com.jaehong.domain.model.DbResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
@@ -37,11 +38,11 @@ class LocalDataSourceImpl @Inject constructor(
     ) {
         try {
             if(recentDao.deleteRecentInfoList(recentList) == 1) {
-                Log.d("DataBase Delete Check", DB_SUCCESS_MESSAGE)
+                Log.d("DataBase Delete Checked", DB_SUCCESS_MESSAGE)
             } else {
-                throw IllegalAccessException(DB_ERROR_MESSAGE)
+                throw IOException(DB_ERROR_MESSAGE)
             }
-        } catch (e: IllegalAccessException) {
+        } catch (e: IOException) {
             e.message
         }
     }
