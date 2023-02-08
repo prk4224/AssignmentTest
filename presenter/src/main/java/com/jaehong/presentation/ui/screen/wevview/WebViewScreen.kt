@@ -1,6 +1,5 @@
 package com.jaehong.presentation.ui.screen.wevview
 
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient

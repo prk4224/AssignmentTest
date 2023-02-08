@@ -1,4 +1,4 @@
-package com.jaehong.presentation
+package com.jaehong.presentation.ui
 
 import android.accounts.NetworkErrorException
 import androidx.lifecycle.SavedStateHandle

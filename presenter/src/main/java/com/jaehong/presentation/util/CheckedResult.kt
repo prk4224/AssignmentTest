@@ -16,6 +16,7 @@ fun <T : Any> checkedResult(
                 return dbResult.data
             }
             is DbResult.Error -> {
+                error()
                 throw dbResult.exception
             }
         }
