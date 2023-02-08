@@ -12,11 +12,11 @@ CLIENT_SECRET_VALUE = "CyAHBA_tu0"
 
 |<img src="https://user-images.githubusercontent.com/83493143/217224989-4e351c32-086a-48b7-ae97-30d38086defa.gif" width="250" />|<img src="https://user-images.githubusercontent.com/83493143/217225420-6b4445f3-5dd0-4ad5-b484-75603f2be311.gif" width="250"/>|<img src="https://user-images.githubusercontent.com/83493143/217225560-149ff145-736f-42f0-839a-7efd69e0c71a.gif" width="250" />|
 |:--:|:--:|:--:|
-|검색화면|클릭 시 웹뷰|프로필 수정|
+|검색화면|클릭 시 웹뷰|검색결과 없을 경우|
 
 |<img src="https://user-images.githubusercontent.com/83493143/217225790-faea86cb-3c8c-4fb3-b5f9-2b1216094f59.gif" width="250" />|<img src="https://user-images.githubusercontent.com/83493143/217225820-692c4f47-81b3-4b32-92f5-1799f1bab8eb.gif" width="250"/>|
 |:--:|:--:|
-|로그인|지도에서 채팅방 찾기|
+|최근 검색어|최근 검색어 업데이트|
 ## 사용 라이브러리
 - Jatpack Compose
 - Compose Navigation
