@@ -30,7 +30,7 @@ fun RecentInfoItems(
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(80.dp),
+            columns = GridCells.Fixed(5),
             content = {
                 items(recentItems) {
                     recentItem(
