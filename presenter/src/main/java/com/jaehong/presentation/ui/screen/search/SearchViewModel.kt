@@ -1,8 +1,6 @@
 package com.jaehong.presentation.ui.screen.search
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -95,10 +93,6 @@ class SearchViewModel @Inject constructor(
 
     fun hideSnackBar() {
         _snackbarState.value = false
-    }
-
-    fun clearSearchList() {
-        searchList = null
     }
 
     fun onNavigateToWebViewClicked(link: String) {

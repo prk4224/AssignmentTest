@@ -51,8 +51,6 @@ fun SearchScreen(
                     if(text != "") {
                         searchViewModel.showProgressBar()
                         searchViewModel.setSearchList(text)
-                    } else {
-                        searchViewModel.clearSearchList()
                     }
                 },
                 recentOnClicked = { searchViewModel.onNavigateToRecentClicked() }
@@ -66,7 +64,7 @@ fun SearchScreen(
         },
     )
 
-    if (snackbarState) {
+    if (snackbarState == true) {
         SnackbarScreen(snackBarState = snackBarState,
             coroutineScope = coroutineScope,
             hideSnackbar = { searchViewModel.hideSnackBar() }
